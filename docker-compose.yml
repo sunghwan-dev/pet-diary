@@ -13,15 +13,16 @@ services:
       - ./postgres_data:/var/lib/postgresql/data
 
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: pet-diary-backend
     restart: always
     ports:
       - "8080:8080"
-    depends_on:
-      - db
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/pet_diary
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    depends_on:
+      - db
