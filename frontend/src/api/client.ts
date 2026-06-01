@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useAuthStore } from '../store/useAuthStore';
 
 // 실제 폰에서 접속하기 위해 localhost 대신 컴퓨터의 로컬 IP를 사용합니다.
-const BASE_URL = 'http://192.168.0.11:8080';
+const BASE_URL = 'http://192.168.0.11:28080';
 
 const client = axios.create({
   baseURL: BASE_URL,
