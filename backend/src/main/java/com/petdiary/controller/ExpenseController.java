@@ -23,4 +23,15 @@ public class ExpenseController {
         expenseService.deleteExpense(expenseId);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/pet")
+    public ResponseEntity<java.util.List<com.petdiary.dto.response.ExpenseResponseDto>> getPetExpenses(@RequestParam Long petId) {
+        return ResponseEntity.ok(expenseService.getPetExpenses(petId));
+    }
+
+    @PutMapping("/{expenseId}")
+    public ResponseEntity<Void> updateExpense(@PathVariable Long expenseId, @RequestBody ExpenseRequestDto requestDto) {
+        expenseService.updateExpense(expenseId, requestDto);
+        return ResponseEntity.ok().build();
+    }
 }

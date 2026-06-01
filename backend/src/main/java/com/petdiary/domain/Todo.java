@@ -59,4 +59,11 @@ public class Todo extends BaseEntity {
         this.isCompleted = !this.isCompleted;
         this.completedAt = this.isCompleted ? LocalDateTime.now() : null;
     }
+
+    public void update(String title, TodoFrequency frequency, LocalTime targetTime, LocalDate dueDate) {
+        this.title = title;
+        this.frequency = frequency;
+        this.targetTime = targetTime;
+        this.dueDate = dueDate;
+    }
 }

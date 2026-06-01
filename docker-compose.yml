@@ -19,10 +19,21 @@ services:
     container_name: pet-diary-backend
     restart: always
     ports:
-      - "28080:8080"
+      - "28080:28080"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/pet_diary
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
     depends_on:
       - db
+
+  # 🌟 여기에 ngrok 서비스를 추가하는 것입니다!
+  ngrok:
+    image: ngrok/ngrok:latest
+    container_name: pet-diary-ngrok
+    restart: always
+    environment:
+      - NGROK_AUTHTOKEN=3EXq1jBGpMWPFWgZx2j83p0l8BO_3j7t3mtkACq14M2Y28DjX
+    command: http backend:28080 # 👈 스프링 포트가 28080이므로 28080으로 수정했습니다.
+    depends_on:
+      - backend

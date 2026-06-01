@@ -35,6 +35,14 @@ public class PetService {
                 .birthDate(requestDto.getBirthDate())
                 .isNeutered(requestDto.getIsNeutered())
                 .profileImageUrl(requestDto.getProfileImageUrl())
+                .petType(requestDto.getPetType())
+                .petTheme(requestDto.getPetTheme())
+                .gender(requestDto.getGender())
+                .coatColor(requestDto.getCoatColor())
+                .allergies(requestDto.getAllergies())
+                .adoptionDate(requestDto.getAdoptionDate())
+                .microchipNumber(requestDto.getMicrochipNumber())
+                .notes(requestDto.getNotes())
                 .build();
 
         Pet savedPet = petRepository.save(pet);
@@ -89,6 +97,55 @@ public class PetService {
                 .isNeutered(pet.getIsNeutered())
                 .profileImageUrl(pet.getProfileImageUrl())
                 .latestWeight(latestWeight)
+                .petType(pet.getPetType())
+                .petTheme(pet.getPetTheme())
+                .gender(pet.getGender())
+                .coatColor(pet.getCoatColor())
+                .allergies(pet.getAllergies())
+                .adoptionDate(pet.getAdoptionDate())
+                .microchipNumber(pet.getMicrochipNumber())
+                .notes(pet.getNotes())
                 .build();
+    }
+
+    @Transactional
+    public void updatePet(Long petId, PetRequestDto requestDto) {
+        Pet pet = petRepository.findById(petId)
+                .orElseThrow(() -> new CustomException("Pet not found", HttpStatus.NOT_FOUND));
+
+        pet.update(
+                requestDto.getName(),
+                requestDto.getBreed(),
+                requestDto.getBirthDate(),
+                requestDto.getIsNeutered(),
+                requestDto.getProfileImageUrl(),
+                requestDto.getPetType(),
+                requestDto.getPetTheme(),
+                requestDto.getGender(),
+                requestDto.getCoatColor(),
+                requestDto.getAllergies(),
+                requestDto.getAdoptionDate(),
+                requestDto.getMicrochipNumber(),
+                requestDto.getNotes()
+        );
+
+        // 몸무게 로그 자동 누적 연동
+        if (requestDto.getCurrentWeight() != null) {
+            BigDecimal latestWeight = weightLogRepository.findByPetIdOrderByMeasuredAtDesc(petId)
+                    .stream()
+                    .findFirst()
+                    .map(WeightLog::getWeight)
+                    .orElse(null);
+
+            if (latestWeight == null || latestWeight.compareTo(requestDto.getCurrentWeight()) != 0) {
+                WeightLog weightLog = WeightLog.builder()
+                        .pet(pet)
+                        .weight(requestDto.getCurrentWeight())
+                        .measuredAt(LocalDate.now())
+                        .memo("정보 수정 시 측정")
+                        .build();
+                weightLogRepository.save(weightLog);
+            }
+        }
     }
 }

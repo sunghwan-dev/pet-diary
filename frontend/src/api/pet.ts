@@ -24,4 +24,8 @@ export const petApi = {
   deletePet: async (petId: number): Promise<void> => {
     await client.delete(`/api/pets/${petId}`);
   },
+
+  updatePet: async (petId: number, data: PetRequest): Promise<void> => {
+    await client.put(`/api/pets/${petId}`, data);
+  },
 };

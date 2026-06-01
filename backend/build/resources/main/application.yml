@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5433}/${DB_NAME:pet_diary}
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5445}/${DB_NAME:pet_diary}
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
@@ -18,7 +18,7 @@ spring:
       max-request-size: 10MB
 
 server:
-  port: 8080
+  port: 28080
 
 app:
   upload:

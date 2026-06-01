@@ -14,4 +14,12 @@ public class PetRequestDto {
     private Boolean isNeutered;
     private BigDecimal currentWeight; // 초기 등록 시 몸무게
     private String profileImageUrl;
+    private String petType;
+    private String petTheme;
+    private String gender;
+    private String coatColor;
+    private String allergies;
+    private LocalDate adoptionDate;
+    private String microchipNumber;
+    private String notes;
 }

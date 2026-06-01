@@ -34,6 +34,23 @@ public class Pet extends BaseEntity {
 
     private String profileImageUrl;
 
+    private String petType;
+
+    private String petTheme;
+
+    private String gender;
+
+    private String coatColor;
+
+    private String allergies;
+
+    private LocalDate adoptionDate;
+
+    private String microchipNumber;
+
+    @Column(length = 1000)
+    private String notes;
+
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<WeightLog> weightLogs = new ArrayList<>();
@@ -57,4 +74,22 @@ public class Pet extends BaseEntity {
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<DiaryEntry> diaries = new ArrayList<>();
+
+    public void update(String name, String breed, LocalDate birthDate, Boolean isNeutered, String profileImageUrl,
+                       String petType, String petTheme, String gender, String coatColor, String allergies,
+                       LocalDate adoptionDate, String microchipNumber, String notes) {
+        this.name = name;
+        this.breed = breed;
+        this.birthDate = birthDate;
+        this.isNeutered = isNeutered;
+        this.profileImageUrl = profileImageUrl;
+        this.petType = petType;
+        this.petTheme = petTheme;
+        this.gender = gender;
+        this.coatColor = coatColor;
+        this.allergies = allergies;
+        this.adoptionDate = adoptionDate;
+        this.microchipNumber = microchipNumber;
+        this.notes = notes;
+    }
 }

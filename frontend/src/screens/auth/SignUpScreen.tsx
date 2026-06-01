@@ -24,7 +24,18 @@ export const SignUpScreen = () => {
         { text: '확인', onPress: () => navigation.goBack() }
       ]);
     } catch (error: any) {
-      Alert.alert('회원가입 실패', error.response?.data?.error || '입력 정보를 확인해주세요.');
+      console.log('SignUp Error:', error);
+      let errorMsg = '입력 정보를 확인해주세요.';
+      if (error.response) {
+        // 서버가 에러 코드를 응답한 경우
+        errorMsg = error.response.data?.message || error.response.data?.error || errorMsg;
+      } else if (error.request) {
+        // 서버가 꺼져 있거나 주소가 잘못되어 응답을 아예 받지 못한 경우
+        errorMsg = '백엔드 서버(28080 포트)가 꺼져 있거나 연결할 수 없습니다. 서버가 정상적으로 기동되었는지 확인해 주세요.';
+      } else {
+        errorMsg = error.message;
+      }
+      Alert.alert('회원가입 실패', errorMsg);
     } finally {
       setLoading(false);
     }

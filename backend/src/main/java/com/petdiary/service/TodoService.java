@@ -54,6 +54,31 @@ public class TodoService {
     }
 
     @Transactional
+    public void updateTodo(Long todoId, TodoRequestDto requestDto) {
+        Todo todo = todoRepository.findById(todoId)
+                .orElseThrow(() -> new CustomException("Todo not found", HttpStatus.NOT_FOUND));
+
+        todo.update(
+                requestDto.getTitle(),
+                requestDto.getFrequency(),
+                requestDto.getTargetTime(),
+                requestDto.getDueDate()
+        );
+
+        if (requestDto.getAlarmTypes() != null) {
+            todo.getAlarmConfigs().clear();
+            List<AlarmConfig> alarmConfigs = requestDto.getAlarmTypes().stream()
+                    .map(type -> AlarmConfig.builder()
+                            .todo(todo)
+                            .alarmType(type)
+                            .isEnabled(true)
+                            .build())
+                    .collect(Collectors.toList());
+            alarmConfigRepository.saveAll(alarmConfigs);
+        }
+    }
+
+    @Transactional
     public void toggleTodoCompletion(Long todoId) {
         Todo todo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new CustomException("Todo not found", HttpStatus.NOT_FOUND));
@@ -66,6 +91,12 @@ public class TodoService {
             throw new CustomException("Todo not found", HttpStatus.NOT_FOUND);
         }
         todoRepository.deleteById(todoId);
+    }
+
+    public TodoResponseDto getTodo(Long todoId) {
+        Todo todo = todoRepository.findById(todoId)
+                .orElseThrow(() -> new CustomException("Todo not found", HttpStatus.NOT_FOUND));
+        return convertToResponseDto(todo);
     }
 
     public List<TodoResponseDto> getPetTodos(Long petId) {

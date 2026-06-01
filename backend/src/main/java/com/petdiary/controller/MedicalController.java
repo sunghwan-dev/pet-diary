@@ -35,4 +35,18 @@ public class MedicalController {
         medicalService.deleteMedication(medicationId);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/records")
+    public ResponseEntity<java.util.List<com.petdiary.dto.response.MedicalRecordResponseDto>> getPetMedicalRecords(@RequestParam Long petId) {
+        return ResponseEntity.ok(medicalService.getPetMedicalRecords(petId));
+    }
+
+    @PutMapping("/records/{recordId}")
+    public ResponseEntity<Void> updateMedicalRecord(
+            @PathVariable Long recordId,
+            @RequestParam String recordType,
+            @RequestBody MedicalLogRequestDto requestDto) {
+        medicalService.updateMedicalRecord(recordId, recordType, requestDto);
+        return ResponseEntity.ok().build();
+    }
 }

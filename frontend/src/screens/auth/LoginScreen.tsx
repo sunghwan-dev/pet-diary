@@ -23,8 +23,8 @@ export const LoginScreen = () => {
     setLoading(true);
     try {
       const data = await authApi.login({ email, password });
-      setTokens(data.accessToken, data.refreshToken);
-      setUser(data.userId, data.email);
+      setTokens(data.accessToken || "", data.refreshToken || "");
+      setUser(data.userId || 0, data.email || "");
     } catch (error: any) {
       Alert.alert('로그인 실패', error.response?.data?.error || '이메일 또는 비밀번호를 확인해주세요.');
     } finally {
@@ -34,7 +34,7 @@ export const LoginScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>펫 다이어리</Text>
+      <Text style={styles.title}>댕냥수첩</Text>
       
       <TextInput
         style={styles.input}
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 40,
-    color: '#4A90E2',
+    color: '#1E1E1E',
   },
   input: {
     borderWidth: 1,
@@ -94,11 +94,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   loginButton: {
-    backgroundColor: '#4A90E2',
+    backgroundColor: '#E07A5F',
     padding: 15,
     borderRadius: 8,
     alignItems: 'center',
     marginTop: 10,
+    shadowColor: '#E07A5F',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 3,
   },
   buttonText: {
     color: '#fff',
@@ -110,7 +115,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   signUpText: {
-    color: '#4A90E2',
+    color: '#E07A5F',
     fontSize: 14,
   },
 });

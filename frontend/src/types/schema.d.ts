@@ -398,6 +398,15 @@ export interface components {
       isNeutered?: boolean;
       currentWeight?: number;
       profileImageUrl?: string;
+      petType?: string;
+      petTheme?: string;
+      gender?: string;
+      coatColor?: string;
+      allergies?: string;
+      /** Format: date */
+      adoptionDate?: string;
+      microchipNumber?: string;
+      notes?: string;
     };
     MedicationRequestDto: {
       name?: string;
@@ -474,6 +483,15 @@ export interface components {
       isNeutered?: boolean;
       profileImageUrl?: string;
       latestWeight?: number;
+      petType?: string;
+      petTheme?: string;
+      gender?: string;
+      coatColor?: string;
+      allergies?: string;
+      /** Format: date */
+      adoptionDate?: string;
+      microchipNumber?: string;
+      notes?: string;
     };
     DiaryEntryResponseDto: {
       /** Format: int64 */

@@ -11,11 +11,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<?> handleCustomException(CustomException e) {
+        e.printStackTrace();
         return ResponseEntity.status(e.getStatus()).body(Map.of("error", e.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleGeneralException(Exception e) {
+        e.printStackTrace();
         return ResponseEntity.status(500).body(Map.of("error", "Internal Server Error", "message", e.getMessage()));
     }
 }

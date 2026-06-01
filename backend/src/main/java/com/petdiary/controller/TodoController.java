@@ -21,9 +21,20 @@ public class TodoController {
         return ResponseEntity.ok(todoService.createTodo(petId, requestDto));
     }
 
+    @PutMapping("/{todoId}")
+    public ResponseEntity<Void> updateTodo(@PathVariable Long todoId, @RequestBody TodoRequestDto requestDto) {
+        todoService.updateTodo(todoId, requestDto);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping
     public ResponseEntity<List<TodoResponseDto>> getPetTodos(@RequestParam Long petId) {
         return ResponseEntity.ok(todoService.getPetTodos(petId));
+    }
+
+    @GetMapping("/{todoId}")
+    public ResponseEntity<TodoResponseDto> getTodo(@PathVariable Long todoId) {
+        return ResponseEntity.ok(todoService.getTodo(todoId));
     }
 
     @PatchMapping("/{todoId}/toggle")

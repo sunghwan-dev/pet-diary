@@ -55,4 +55,44 @@ public class ExpenseService {
         }
         expenseRepository.deleteById(expenseId);
     }
+
+    @Transactional(readOnly = true)
+    public java.util.List<com.petdiary.dto.response.ExpenseResponseDto> getPetExpenses(Long petId) {
+        Pet pet = petRepository.findById(petId)
+                .orElseThrow(() -> new CustomException("Pet not found", HttpStatus.NOT_FOUND));
+
+        return expenseRepository.findByPetId(petId).stream()
+                .map(exp -> com.petdiary.dto.response.ExpenseResponseDto.builder()
+                        .id(exp.getId())
+                        .petId(pet.getId())
+                        .petName(pet.getName())
+                        .category(exp.getCategory())
+                        .amount(exp.getAmount())
+                        .expenseDate(exp.getExpenseDate())
+                        .memo(exp.getMemo())
+                        .medicalLogId(exp.getMedicalLog() != null ? exp.getMedicalLog().getId() : null)
+                        .medicationId(exp.getMedication() != null ? exp.getMedication().getId() : null)
+                        .build())
+                .sorted((a, b) -> b.getExpenseDate().compareTo(a.getExpenseDate()))
+                .collect(java.util.stream.Collectors.toList());
+    }
+
+    @Transactional
+    public void updateExpense(Long expenseId, ExpenseRequestDto requestDto) {
+        Expense expense = expenseRepository.findById(expenseId)
+                .orElseThrow(() -> new CustomException("Expense not found", HttpStatus.NOT_FOUND));
+
+        Expense updated = Expense.builder()
+                .id(expense.getId())
+                .pet(expense.getPet())
+                .category(requestDto.getCategory())
+                .amount(requestDto.getAmount())
+                .expenseDate(requestDto.getExpenseDate())
+                .memo(requestDto.getMemo())
+                .medicalLog(expense.getMedicalLog())
+                .medication(expense.getMedication())
+                .build();
+
+        expenseRepository.save(updated);
+    }
 }

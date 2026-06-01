@@ -15,4 +15,12 @@ public class PetResponseDto {
     private Boolean isNeutered;
     private String profileImageUrl;
     private BigDecimal latestWeight; // WeightLog에서 가져온 최신값
+    private String petType;
+    private String petTheme;
+    private String gender;
+    private String coatColor;
+    private String allergies;
+    private LocalDate adoptionDate;
+    private String microchipNumber;
+    private String notes;
 }
