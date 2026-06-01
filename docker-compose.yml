@@ -27,7 +27,7 @@ services:
     depends_on:
       - db
 
-  # 🌟 여기에 ngrok 서비스를 추가하는 것입니다!
+  # 🌟 도메인이 없어서  ngrok 서비스를 추가
   ngrok:
     image: ngrok/ngrok:latest
     container_name: pet-diary-ngrok
