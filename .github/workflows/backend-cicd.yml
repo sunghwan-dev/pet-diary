@@ -6,10 +6,6 @@ on:
     paths:
       - 'backend/**'
       - 'docker-compose.yml'
-  pull_request:
-    branches: [ "main" ]
-    paths:
-      - 'backend/**'
 
 jobs:
   build:
@@ -49,6 +45,16 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SERVER_KEY }}
           script: |
+            # 폴더가 없으면 생성 및 클론, 있으면 풀
+            if [ ! -d "~/pet-diary" ]; then
+              git clone https://github.com/${{ github.repository }}.git ~/pet-diary
+            fi
             cd ~/pet-diary
             git pull origin main
-            docker-compose up -d --build backend
+            
+            # 최신 docker compose 명령어 사용 (없으면 이전 명령어 시도)
+            if docker compose version > /dev/null 2>&1; then
+              docker compose up -d --build backend
+            else
+              docker-compose up -d --build backend
+            fi
