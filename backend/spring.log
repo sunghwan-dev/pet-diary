@@ -769,3 +769,20 @@ io.jsonwebtoken.ExpiredJwtException: JWT expired at 2026-06-01T12:25:19Z. Curren
 	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
 
 2026-06-01T23:43:44.495+09:00  WARN 55136 --- [l-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=7m14s641ms).
+
+> Task :bootRun FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':bootRun'.
+> Process 'command '/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/bin/java'' finished with non-zero exit value 137
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 6h 7m 27s
+4 actionable tasks: 2 executed, 2 up-to-date

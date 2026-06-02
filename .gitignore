@@ -1,0 +1,38 @@
+# 🐾 Database & Data
+postgres_data/
+postgres_data_temp/
+
+# ☕ Java / Spring Boot
+.gradle/
+**/build/
+**/out/
+**/bin/
+spring.log
+*.log
+.gradletasknamecache
+
+# 📦 Dependency Directories
+node_modules/
+**/node_modules/
+
+# 📱 Expo & Mobile Development
+.expo/
+**/.expo/
+dist/
+**/dist/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# 💻 IDEs & Editors
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+Thumbs.db
