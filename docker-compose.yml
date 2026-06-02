@@ -19,7 +19,7 @@ services:
     container_name: pet-diary-backend
     restart: always
     ports:
-      - "28080:8080"
+      - "28080:28080"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/pet_diary
       SPRING_DATASOURCE_USERNAME: postgres
@@ -27,13 +27,11 @@ services:
     depends_on:
       - db
 
-  # 🌟 ngrok 서비스를 다시 제대로 합류시켰습니다!
-  ngrok:
-    image: ngrok/ngrok:latest
-    container_name: pet-diary-ngrok
+  # 🌟 ngrok 대신 무료 Cloudflare Quick Tunnel(trycloudflare.com)로 대체
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: pet-diary-tunnel
     restart: always
-    environment:
-      - NGROK_AUTHTOKEN=3EXq1jBGpMWPFWgZx2j83p0l8BO_3j7t3mtkACq14M2Y28DjX
-    command: http backend:8080 # 백엔드가 컨테이너 내부에서 8080으로 돌고 있으므로 8080이 맞습니다.
+    command: tunnel --no-autoupdate --url http://backend:28080
     depends_on:
       - backend
