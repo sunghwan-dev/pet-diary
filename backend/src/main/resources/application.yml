@@ -20,6 +20,12 @@ spring:
 server:
   port: 28080
 
+springdoc:
+  swagger-ui:
+    path: /docs
+  api-docs:
+    path: /docs-api
+
 app:
   upload:
     dir: ./uploads
