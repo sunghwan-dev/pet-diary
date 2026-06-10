@@ -2,7 +2,7 @@ name: Backend CI/CD
 
 on:
   push:
-    branches: [ "main", "develop" ]
+    branches: ["main", "dev"]
 
 jobs:
   build:
@@ -13,8 +13,8 @@ jobs:
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          java-version: '21'
-          distribution: 'temurin'
+          java-version: "21"
+          distribution: "temurin"
           cache: gradle
 
       - name: Grant execute permission for gradlew
@@ -24,7 +24,7 @@ jobs:
         run: cd backend && ./gradlew build -x test
 
   deploy:
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev')
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -50,24 +50,23 @@ jobs:
             else
               TARGET_DIR="$HOME/pet-diary-dev"
               COMPOSE_FILE="docker-compose.dev.yml"
-              BRANCH="develop"
+              BRANCH="dev"
             fi
-            
+
             # 폴더가 없으면 생성 및 클론
             if [ ! -d "$TARGET_DIR" ]; then
               git clone -b $BRANCH https://github.com/${{ github.repository }}.git $TARGET_DIR
             fi
             cd $TARGET_DIR
-            
+
             # 원격 변경사항 반영
             git fetch --all
             git checkout $BRANCH
             git pull origin $BRANCH
-            
+
             # Docker Compose 실행
             if docker compose version > /dev/null 2>&1; then
               docker compose -f $COMPOSE_FILE up -d --build backend
             else
               docker-compose -f $COMPOSE_FILE up -d --build backend
             fi
-
