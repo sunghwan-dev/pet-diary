@@ -6,9 +6,7 @@ import { NavigationContainerRef } from '@react-navigation/native';
 // 전역 navigationRef – RootNavigator에 연결합니다.
 export const navigationRef = React.createRef<NavigationContainerRef<any>>();
 
-// API 베이스 URL (포트 28081)
-const BASE_URL = 'http://192.168.0.11:28080';
-// const BASE_URL = 'https://hockey-genius-anticipated-staying.trycloudflare.com';
+const BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL || 'https://dev-api.simba-noba.com';
 
 const client = axios.create({
   baseURL: BASE_URL,

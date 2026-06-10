@@ -1,27 +1,27 @@
 services:
   db:
     image: postgres:14
-    container_name: pet-diary-db-prod
+    container_name: pet-diary-db-dev
     restart: always
     environment:
       POSTGRES_DB: pet_diary
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
-      - "5445:5432"
+      - "5446:5432"
     volumes:
-      - /home/william/databases/pet-diary:/var/lib/postgresql/data
+      - /home/william/databases/pet-diary-dev:/var/lib/postgresql/data
 
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: pet-diary-backend-prod
+    container_name: pet-diary-backend-dev
     restart: always
     ports:
-      - "28080:28080"
+      - "28081:28080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://pet-diary-db-prod:5432/pet_diary
+      SPRING_DATASOURCE_URL: jdbc:postgresql://pet-diary-db-dev:5432/pet_diary
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
     depends_on:
@@ -30,9 +30,8 @@ services:
   # 🌟 ngrok 대신 무료 Cloudflare Quick Tunnel(trycloudflare.com)로 대체
   tunnel:
     image: cloudflare/cloudflared:latest
-    container_name: pet-diary-tunnel-prod
+    container_name: pet-diary-tunnel-dev
     restart: always
-    command: tunnel --no-autoupdate --url http://pet-diary-backend-prod:28080
+    command: tunnel --no-autoupdate --url http://pet-diary-backend-dev:28080
     depends_on:
       - backend
-

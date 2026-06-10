@@ -2,7 +2,7 @@ name: Backend CI/CD
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "develop" ]
 
 jobs:
   build:
@@ -24,7 +24,7 @@ jobs:
         run: cd backend && ./gradlew build -x test
 
   deploy:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -47,11 +47,23 @@ jobs:
               git clone https://github.com/${{ github.repository }}.git ~/pet-diary
             fi
             cd ~/pet-diary
-            git pull origin main
+            
+            # 원격 변경사항을 깨끗이 당겨옴
+            git fetch --all
+            if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+              git checkout main
+              git pull origin main
+              COMPOSE_FILE="docker-compose.yml"
+            else
+              git checkout develop
+              git pull origin develop
+              COMPOSE_FILE="docker-compose.dev.yml"
+            fi
             
             # 최신 docker compose 명령어 사용 (없으면 이전 명령어 시도)
             if docker compose version > /dev/null 2>&1; then
-              docker compose up -d --build backend
+              docker compose -f $COMPOSE_FILE up -d --build backend
             else
-              docker-compose up -d --build backend
+              docker-compose -f $COMPOSE_FILE up -d --build backend
             fi
+
