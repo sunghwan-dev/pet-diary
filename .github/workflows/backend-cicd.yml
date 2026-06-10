@@ -42,25 +42,29 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SERVER_KEY }}
           script: |
-            # 폴더가 없으면 생성 및 클론, 있으면 풀
-            if [ ! -d "~/pet-diary" ]; then
-              git clone https://github.com/${{ github.repository }}.git ~/pet-diary
-            fi
-            cd ~/pet-diary
-            
-            # 원격 변경사항을 깨끗이 당겨옴
-            git fetch --all
+            # 브랜치별 타겟 폴더 및 docker-compose 파일 설정
             if [ "${{ github.ref }}" = "refs/heads/main" ]; then
-              git checkout main
-              git pull origin main
+              TARGET_DIR="$HOME/pet-diary"
               COMPOSE_FILE="docker-compose.yml"
+              BRANCH="main"
             else
-              git checkout develop
-              git pull origin develop
+              TARGET_DIR="$HOME/pet-diary-dev"
               COMPOSE_FILE="docker-compose.dev.yml"
+              BRANCH="develop"
             fi
             
-            # 최신 docker compose 명령어 사용 (없으면 이전 명령어 시도)
+            # 폴더가 없으면 생성 및 클론
+            if [ ! -d "$TARGET_DIR" ]; then
+              git clone -b $BRANCH https://github.com/${{ github.repository }}.git $TARGET_DIR
+            fi
+            cd $TARGET_DIR
+            
+            # 원격 변경사항 반영
+            git fetch --all
+            git checkout $BRANCH
+            git pull origin $BRANCH
+            
+            # Docker Compose 실행
             if docker compose version > /dev/null 2>&1; then
               docker compose -f $COMPOSE_FILE up -d --build backend
             else
